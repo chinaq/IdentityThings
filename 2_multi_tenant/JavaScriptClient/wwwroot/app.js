@@ -22,7 +22,7 @@ var base_url = window.location.origin;
 
 var config = {
     // authority: "https://localhost:5001",
-    authority: "http://localhost:5001",
+    authority: 'http://'+window.location.hostname+':5001',
     client_id: "js",
     // redirect_uri: "https://localhost:5003/callback.html",
     redirect_uri: base_url + "/callback.html",
@@ -30,6 +30,7 @@ var config = {
     scope:"openid profile api1",
     // post_logout_redirect_uri : "https://localhost:5003/index.html",
     post_logout_redirect_uri : base_url + "/index.html",
+    acr_values:'tenant:'+window.location.host.split('.')[0]+'',
 };
 var mgr = new Oidc.UserManager(config);
 
@@ -49,7 +50,7 @@ function login() {
 function api() {
     mgr.getUser().then(function (user) {
         // var url = "https://localhost:6001/identity";
-        var url = "http://localhost:6001/identity";
+        var url = 'http://'+window.location.hostname+':6001/identity';
 
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);

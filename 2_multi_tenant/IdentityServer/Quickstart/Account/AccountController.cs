@@ -110,7 +110,8 @@ namespace IdentityServerHost.Quickstart.UI
             if (ModelState.IsValid)
             {
                 // validate username/password against in-memory store
-                if (_users.ValidateCredentials(model.Username, model.Password))
+                if (_users.ValidateCredentials(model.Username, model.Password)
+                    && TenantValidate(context, model.Username))
                 {
                     var user = _users.FindByUsername(model.Username);
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username, clientId: context?.Client.ClientId));
@@ -171,6 +172,12 @@ namespace IdentityServerHost.Quickstart.UI
             // something went wrong, show form with error
             var vm = await BuildLoginViewModelAsync(model);
             return View(vm);
+        }
+
+        private bool TenantValidate(AuthorizationRequest context, string userName) {
+            var user = _users.FindByUsername(userName);
+            return !string.IsNullOrEmpty(context.Tenant) 
+                && user.Claims.First(c => c.Type == "TenantId").Value == context.Tenant.ToString();
         }
 
         

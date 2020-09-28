@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 
 using Microsoft.AspNetCore.Http;
+using IdentityServer4.Services;
+using IdentityServer.Tenant;
 
 namespace IdentityServer
 {
@@ -18,6 +20,9 @@ namespace IdentityServer
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IProfileService, ProfileService>();
+
             services.AddControllersWithViews();
 
             var builder = services.AddIdentityServer()

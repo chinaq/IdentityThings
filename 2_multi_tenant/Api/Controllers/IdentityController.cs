@@ -4,11 +4,13 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Api.Tenant;
 
 namespace Api.Controllers
 {
     [Route("identity")]
     [Authorize]
+    // [CustomAuthorize(AuthenticationSchemes = "Bearer")]
     public class IdentityController : ControllerBase
     {
         public IActionResult Get()

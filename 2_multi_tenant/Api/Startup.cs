@@ -1,8 +1,12 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
+using Api.Tenant;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Api
@@ -19,10 +23,13 @@ namespace Api
                 {
                     // options.Authority = "https://localhost:5001";
                     options.Authority = "http://localhost:5001";
+                    // options.Authority = "http://q.q:5001";
+                    // options.Authority = "http://zero.q.q:5001";
                     options.RequireHttpsMetadata=false;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateAudience = false
+                        ValidateAudience = false,
+                        // ValidateIssuer = false,
                     };
                 });
             
@@ -47,6 +54,12 @@ namespace Api
                         .AllowAnyMethod();
                 });
             });
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<TenantProvider>();
+            services.AddSingleton<IConfigureOptions<JwtBearerOptions>, JwtOptionsInitializer>();
+            // services.AddSingleton<IOptionsMonitor<JwtBearerOptions>, JweBearerOptionsProvider>();
+
         }
 
         public void Configure(IApplicationBuilder app)
