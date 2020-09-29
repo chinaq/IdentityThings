@@ -58,7 +58,7 @@ namespace Api
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<TenantProvider>();
             services.AddSingleton<IConfigureOptions<JwtBearerOptions>, JwtOptionsInitializer>();
-            // services.AddSingleton<IOptionsMonitor<JwtBearerOptions>, JweBearerOptionsProvider>();
+            services.AddSingleton<IOptionsMonitor<JwtBearerOptions>, JweBearerOptionsProvider>();
 
         }
 

@@ -1,13 +1,14 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-using Api.Tenant;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Finbuckle.MultiTenant;
+using Api.TenantFinbuckle;
 
 namespace Api
 {
@@ -21,10 +22,7 @@ namespace Api
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
-                    // options.Authority = "https://localhost:5001";
                     options.Authority = "http://localhost:5001";
-                    // options.Authority = "http://q.q:5001";
-                    // options.Authority = "http://zero.q.q:5001";
                     options.RequireHttpsMetadata=false;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -48,16 +46,24 @@ namespace Api
                 // this defines a CORS policy called "default"
                 options.AddPolicy("default", policy =>
                 {
-                    // policy.WithOrigins("https://localhost:5003")
                     policy.WithOrigins("http://zero.q.q:5003", "http://one.q.q:5003")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
             });
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<TenantProvider>();
-            services.AddSingleton<IConfigureOptions<JwtBearerOptions>, JwtOptionsInitializer>();
+            services.AddMultiTenant<JwtTenantInfo>()
+                .WithConfigurationStore()
+                .WithHostStrategy()
+                .WithPerTenantOptions<JwtBearerOptions>((o, tenantInfo) =>
+                {
+                    // Assume tenants are configured with an authority string to use here.
+                    o.Authority = tenantInfo.JwtAuthority;
+                });
+
+            // services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            // services.AddSingleton<TenantProvider>();
+            // services.AddSingleton<IConfigureOptions<JwtBearerOptions>, JwtOptionsInitializer>();
             // services.AddSingleton<IOptionsMonitor<JwtBearerOptions>, JweBearerOptionsProvider>();
 
         }
@@ -67,6 +73,7 @@ namespace Api
             app.UseRouting();
 
             app.UseCors("default");
+            app.UseMultiTenant();
             
             app.UseAuthentication();
             app.UseAuthorization();
