@@ -5,13 +5,13 @@ using Microsoft.Extensions.Options;
 
 namespace Api.Tenant
 {
-    public class JweBearerOptionsProvider : IOptionsMonitor<JwtBearerOptions>
+    public class JwtBearerOptionsProvider : IOptionsMonitor<JwtBearerOptions>
     {
         private readonly ConcurrentDictionary<(string name, string tenant), Lazy<JwtBearerOptions>> _cache;
         private readonly IOptionsFactory<JwtBearerOptions> _optionsFactory;
         private readonly TenantProvider _tenantProvider;
 
-        public JweBearerOptionsProvider(
+        public JwtBearerOptionsProvider(
             IOptionsFactory<JwtBearerOptions> optionsFactory,
             TenantProvider tenantProvider)
         {

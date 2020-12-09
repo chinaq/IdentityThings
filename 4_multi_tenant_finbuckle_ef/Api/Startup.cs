@@ -9,14 +9,30 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Finbuckle.MultiTenant;
 using Api.TenantFinbuckle;
+using Api.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace Api
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddDbContext<BloggingDbContext>(
+                opt => opt.UseSqlite("Data Source=blogging.db")
+            );
 
             // accepts any access token issued by identity server
             services.AddAuthentication("Bearer")
@@ -68,8 +84,18 @@ namespace Api
 
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope()) {
+                var context = serviceScope.ServiceProvider.GetRequiredService<BloggingDbContext>();
+                // context.Database.Migrate();
+                var dbCreatedCurrently = context.Database.EnsureCreated();
+                if (env.IsDevelopment() && dbCreatedCurrently) {
+                    var seed = new TestDataSeeder(Configuration);
+                    seed.SeedData();
+                }
+            }
+
             app.UseRouting();
 
             app.UseCors("default");
