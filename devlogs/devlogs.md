@@ -7,3 +7,5 @@
     - [Is it possible to set the authority url dynamicly based on server address or etc.?](https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/1932)
   - 当前 IdentityServer 中对 Tenant 的验证，基于请求中的 `acr_values: tenant: xxx` 参数，Swagger 中增加方式亦未知
     - 此方法可以改进为使用 server url 来进行确认，可解决
+- Swagger 在 dotnet core 3.x 上的验证
+  - 参考 [ASP.NET Core Swagger UI Authorization using IdentityServer4](https://www.scottbrady91.com/Identity-Server/ASPNET-Core-Swagger-UI-Authorization-using-IdentityServer4)
