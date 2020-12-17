@@ -15,3 +15,5 @@
   - 不同域名不同租户
   - 不同数据库
     - 使用 finbuckle 按 tenant 调用数据库
+- 5 multi tenant finbuckle ef swagger
+  - 妄图加入 Swagger 多租户验证，失败
