@@ -31,16 +31,9 @@ namespace IdentityServer.Tenant
         public Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             var sub = context.Subject.GetSubjectId();
-            // var user = await _userManager.FindByIdAsync(sub);
-            // var principal = await _claimsFactory.CreateAsync(user);
             var user = _users.FindBySubjectId(sub);
-
-            // var claims = principal.Claims.ToList();
-            // claims = claims.Where(claim => context.RequestedClaimTypes.Contains(claim.Type)).ToList();
             var claims = user.Claims.ToList();
-
             //Add custom claims in the token here
-            // claims.Add(new Claim("TenantId", user.TenantId ?? string.Empty));
             context.IssuedClaims = claims;
             return Task.CompletedTask;
         }
@@ -49,26 +42,22 @@ namespace IdentityServer.Tenant
         public Task IsActiveAsync(IsActiveContext context)
         {
             var sub = context.Subject.GetSubjectId();
-            // var user = await _userManager.FindByIdAsync(sub);
             var user = _users.FindBySubjectId(sub);
 
             if(context.Caller == "AuthorizeEndpoit")
             {
-                var tenantId = _context.HttpContext.Request.Query["acr_values"].ToString().Replace("tenant:", "");
-                // if(user!=null && !string.IsNullOrEmpty(tenantId)&&tenantId==user.TenantId)
+                // var tenantId = _context.HttpContext.Request.Query["acr_values"].ToString().Replace("tenant:", "");
+                var tenantId = _context.HttpContext.Request.Host.Value.Split(".")[0];
+
                 if(user!=null 
                     && !string.IsNullOrEmpty(tenantId)
                     && tenantId == user.Claims.First(c => c.Type == "TenantId").Value)
                 {
                     context.IsActive = true;
-                }
-                else
-                {
+                } else {
                     context.IsActive = false;
                 }
-            }
-            else
-            {
+            } else {
                 context.IsActive = user != null;
             }
             return Task.CompletedTask;

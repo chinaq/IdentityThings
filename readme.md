@@ -17,3 +17,4 @@
     - 使用 finbuckle 按 tenant 调用数据库
 - 5 multi tenant finbuckle ef swagger
   - 妄图加入 Swagger 多租户验证，失败
+  - 当前仅 zero 租户可验证，因为不知如何实现 swagger 的动态 Authority

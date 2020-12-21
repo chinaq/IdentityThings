@@ -175,9 +175,13 @@ namespace IdentityServerHost.Quickstart.UI
         }
 
         private bool TenantValidate(AuthorizationRequest context, string userName) {
+            
+            // var tenant = context.Tenant;
+            var tenant = HttpContext.Request.Host.Value.Split(".")[0];
+
             var user = _users.FindByUsername(userName);
-            return !string.IsNullOrEmpty(context.Tenant) 
-                && user.Claims.First(c => c.Type == "TenantId").Value == context.Tenant.ToString();
+            return !string.IsNullOrEmpty(tenant) 
+                && user.Claims.First(c => c.Type == "TenantId").Value == tenant;
         }
 
         

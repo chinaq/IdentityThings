@@ -65,7 +65,7 @@ namespace IdentityServer
                 options.AddPolicy("default", policy =>
                 {
                     // policy.WithOrigins("https://localhost:5003")
-                    policy.WithOrigins("http://zero.q.q:5003", "http://one.q.q:5003")
+                    policy.WithOrigins("http://zero.q.q:5003", "http://one.q.q:5003", "http://zero.q.q:6001", "http://one.q.q:6001")
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
