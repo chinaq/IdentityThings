@@ -10,8 +10,7 @@ using System.Text.Json;
 
 namespace Api.Controllers
 {
-    [Route("identity")]
-    [Authorize]
+    [Route("api")]
     // [CustomAuthorize(AuthenticationSchemes = "Bearer")]
     public class IdentityController : ControllerBase
     {
@@ -22,20 +21,28 @@ namespace Api.Controllers
             this.context = context;
         }
 
-        [HttpGet]
+        [HttpGet("identity")]
+        [Authorize]
         public IActionResult Get()
         {
-            // return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
-            var result = context.Blogs.ToList();
-            Console.WriteLine(JsonSerializer.Serialize(result));
+            return new JsonResult(from c in User.Claims select new { c.Type, c.Value });
+        }
 
+        [HttpGet("blogscount")]
+        public IActionResult GetBlogsCount()
+        {
+            var result = $"total blogs count of this tenant: {context.Blogs.Count()}";
+            // Console.WriteLine(JsonSerializer.Serialize(result));
             return new JsonResult(result);
         }
 
-        // [HttpGet("blogs")]
-        // public IActionResult GetBlogs()
-        // {
-        //     return new JsonResult(context.Blogs);
-        // }
+        [HttpGet("blogs")]
+        [Authorize]
+        public IActionResult GetBlogs()
+        {
+            var result = context.Blogs.ToList();
+            // Console.WriteLine(JsonSerializer.Serialize(result));
+            return new JsonResult(result);
+        }
     }
 }

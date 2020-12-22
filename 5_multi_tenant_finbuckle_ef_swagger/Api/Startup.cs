@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.OpenApi.Models;
 using System;
+using Api.Swagger;
 
 namespace Api
 {
@@ -103,14 +104,15 @@ namespace Api
                         }
                     }
                 });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
-                    [
-                        new OpenApiSecurityScheme {Reference = new OpenApiReference {
-                            Type = ReferenceType.SecurityScheme, 
-                            Id = "oauth2"}
-                        }
-                    ] = new[] {"api1"}
-                });
+                // c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                //     [
+                //         new OpenApiSecurityScheme {Reference = new OpenApiReference {
+                //             Type = ReferenceType.SecurityScheme, 
+                //             Id = "oauth2"}
+                //         }
+                //     ] = new[] {"api1"}
+                // });
+                c.OperationFilter<AuthorizeCheckOperationFilter>();
             });
 
         }
@@ -145,8 +147,8 @@ namespace Api
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers()
-                    .RequireAuthorization("ApiScope");
+                // endpoints.MapControllers().RequireAuthorization("ApiScope");
+                endpoints.MapControllers();
             });
         }
     }

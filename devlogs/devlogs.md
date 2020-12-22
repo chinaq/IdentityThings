@@ -1,5 +1,10 @@
 # Dev Logs
 
+## 2020.12.22
+- Identity Server 中一直存在着 ProfileService 的 bug
+  - 由于 ProfileService 在 Statup 中比 Identity Server 注册的更早，导致被后者覆盖，已修改
+  - 导致的问题是 claim 的修改和检测并未实际用到
+
 ## 2020.12.18
 - 上接前一日，项目 5 尝试仅单一硬编码的 domain 的 swagger 可通过
   - 使用域名校对，不用 `acr_values: tenant: xxx`

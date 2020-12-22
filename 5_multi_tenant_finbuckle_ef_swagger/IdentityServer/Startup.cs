@@ -20,9 +20,6 @@ namespace IdentityServer
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IProfileService, ProfileService>();
-
             services.AddControllersWithViews();
 
             var builder = services.AddIdentityServer()
@@ -70,6 +67,9 @@ namespace IdentityServer
                         .AllowAnyMethod();
                 });
             });
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IProfileService, ProfileService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

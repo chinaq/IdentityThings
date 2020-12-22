@@ -31,7 +31,11 @@ namespace Api.Data
                 var myBlog = new Blog {
                     Owner = "Mr. X",
                 };
+                var myBlog1 = new Blog {
+                    Owner = "Mr. X 1",
+                };
                 tenant0Context.Blogs.Add(myBlog);
+                tenant0Context.Blogs.Add(myBlog1);
                 tenant0Context.SaveChanges();
             }
 

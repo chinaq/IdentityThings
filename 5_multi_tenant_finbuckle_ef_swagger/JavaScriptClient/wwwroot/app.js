@@ -15,7 +15,9 @@ function log() {
 }
 
 document.getElementById("login").addEventListener("click", login, false);
-document.getElementById("api").addEventListener("click", api, false);
+document.getElementById("identityApi").addEventListener("click", identityApi, false);
+document.getElementById("blogscountApi").addEventListener("click", blogscountApi, false);
+document.getElementById("blogsApi").addEventListener("click", blogsApi, false);
 document.getElementById("logout").addEventListener("click", logout, false);
 
 var base_url = window.location.origin;
@@ -44,9 +46,37 @@ function login() {
     mgr.signinRedirect();
 }
 
-function api() {
+function identityApi() {
     mgr.getUser().then(function (user) {
-        var url = 'http://'+window.location.hostname+':6001/identity';
+        var url = 'http://'+window.location.hostname+':6001/api/identity';
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url);
+        xhr.onload = function () {
+            log(xhr.status, JSON.parse(xhr.responseText));
+        }
+        xhr.setRequestHeader("Authorization", "Bearer " + user.access_token);
+        xhr.send();
+    });
+}
+
+function blogscountApi() {
+    // mgr.getUser().then(function (user) {
+        var url = 'http://'+window.location.hostname+':6001/api/blogscount';
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url);
+        xhr.onload = function () {
+            log(xhr.status, JSON.parse(xhr.responseText));
+        }
+        // xhr.setRequestHeader("Authorization", "Bearer " + user.access_token);
+        xhr.send();
+    // });
+}
+
+function blogsApi() {
+    mgr.getUser().then(function (user) {
+        var url = 'http://'+window.location.hostname+':6001/api/blogs';
 
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
