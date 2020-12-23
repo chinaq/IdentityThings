@@ -10,7 +10,7 @@
     <ApplicationURL>http://localhost:6001</ApplicationURL>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Finbuckle.MultiTenant.AspNetCore" Version="6.0.0" />
+    <PackageReference Include="Finbuckle.MultiTenant.AspNetCore" Version="6.1.0" />
     <PackageReference Include="Finbuckle.MultiTenant.EntityFrameworkCore" Version="6.1.0" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.7" />

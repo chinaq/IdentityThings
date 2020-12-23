@@ -111,7 +111,8 @@ namespace IdentityServerHost.Quickstart.UI
             {
                 // validate username/password against in-memory store
                 if (_users.ValidateCredentials(model.Username, model.Password)
-                    && TenantValidate(context, model.Username))
+                    && TenantValidate(model.Username))
+                    // && TenantValidate(context, model.Username))
                 {
                     var user = _users.FindByUsername(model.Username);
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username, clientId: context?.Client.ClientId));
@@ -174,8 +175,8 @@ namespace IdentityServerHost.Quickstart.UI
             return View(vm);
         }
 
-        private bool TenantValidate(AuthorizationRequest context, string userName) {
-            
+        private bool TenantValidate(string userName)
+        {
             // var tenant = context.Tenant;
             var tenant = HttpContext.Request.Host.Value.Split(".")[0];
 
